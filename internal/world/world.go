@@ -1,4 +1,4 @@
-package game
+package world
 
 const (
 	MapWidth  = 100

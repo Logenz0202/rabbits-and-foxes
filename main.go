@@ -1,15 +1,17 @@
 package main
 
 import (
-	"math/rand/v2"
-	"rabbits-and-foxes/internal/game"
+	"math/rand"
+	"time"
+
 	"rabbits-and-foxes/internal/graphics"
+	"rabbits-and-foxes/internal/world"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type Game struct {
-	world *game.World
+	world *world.World
 }
 
 func (g *Game) Update() error {
@@ -22,25 +24,27 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
-	return game.MapWidth * graphics.TileSize, game.MapHeight * graphics.TileSize
+	return world.MapWidth * graphics.TileSize, world.MapHeight * graphics.TileSize
 }
 
 func main() {
-	graphics.LoadAssets()
-	world := game.NewWorld()
+	rand.Seed(time.Now().UnixNano())
 
-	for y := 0; y < game.MapHeight; y++ {
-		for x := 0; x < game.MapWidth; x++ {
+	graphics.LoadAssets()
+	w := world.NewWorld()
+
+	for y := 0; y < world.MapHeight; y++ {
+		for x := 0; x < world.MapWidth; x++ {
 			if rand.Float64() < 0.05 {
-				world.Tiles[y][x].Grass = game.NewGrass()
+				w.Tiles[y][x].Grass = world.NewGrass()
 			}
 		}
 	}
 
-	ebiten.SetWindowTitle("Symulacja – trawa i mapa")
+	ebiten.SetWindowTitle("Rabbits and Foxes – Ecosystem")
 	ebiten.SetWindowSize(800, 800)
 
-	if err := ebiten.RunGame(&Game{world: world}); err != nil {
+	if err := ebiten.RunGame(&Game{world: w}); err != nil {
 		panic(err)
 	}
 }

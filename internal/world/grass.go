@@ -1,6 +1,8 @@
-package game
+package world
 
-import "math/rand"
+import (
+	"math/rand"
+)
 
 const (
 	MaxGrassAmount = 1.0
@@ -9,7 +11,7 @@ const (
 )
 
 type Grass struct {
-	Amount float64 // od 0 do MaxGrassAmount
+	Amount float64 // 0 to MaxGrassAmount
 }
 
 func NewGrass() *Grass {
