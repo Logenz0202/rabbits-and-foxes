@@ -17,6 +17,7 @@ var (
 	GrassTile *ebiten.Image
 	DirtTile  *ebiten.Image
 	Rabbit    *ebiten.Image
+	Fox       *ebiten.Image
 )
 
 func LoadAssets() {
@@ -35,4 +36,5 @@ func LoadAssets() {
 	GrassTile = load("assets/tiles/grass.jpg")
 	DirtTile = load("assets/tiles/dirt.jpg")
 	Rabbit = load("assets/animals/rabbit.png")
+	Fox = load("assets/animals/fox.png")
 }

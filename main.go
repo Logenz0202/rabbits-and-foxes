@@ -39,16 +39,22 @@ func main() {
 
 	for y := 0; y < world.MapHeight; y++ {
 		for x := 0; x < world.MapWidth; x++ {
-			if rand.Float64() < 0.05 {
+			if rand.Float64() < 0.15 {
 				w.Tiles[y][x].Grass = world.NewGrass()
 			}
 		}
 	}
 
-	for i := 0; i < 20; i++ {
+	for i := 0; i < 100; i++ {
 		x := rand.Intn(world.MapWidth)
 		y := rand.Intn(world.MapHeight)
 		w.Rabbits = append(w.Rabbits, world.NewRabbit(x, y))
+	}
+
+	for i := 0; i < 20; i++ {
+		x := rand.Intn(world.MapWidth)
+		y := rand.Intn(world.MapHeight)
+		w.Foxes = append(w.Foxes, world.NewFox(x, y))
 	}
 
 	ebiten.SetWindowTitle("Rabbits and Foxes – Ecosystem")

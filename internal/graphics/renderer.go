@@ -35,4 +35,15 @@ func RenderWorld(screen *ebiten.Image, w *world.World) {
 			screen.DrawImage(Rabbit, op)
 		}
 	}
+
+	for _, f := range w.Foxes {
+		if f.IsAlive() {
+			op := &ebiten.DrawImageOptions{}
+			if f.Direction < 0 {
+				op.GeoM.Scale(-1, 1) // odbicie w poziomie
+			}
+			op.GeoM.Translate(float64(f.X*TileSize), float64(f.Y*TileSize))
+			screen.DrawImage(Fox, op)
+		}
+	}
 }

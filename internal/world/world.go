@@ -1,8 +1,8 @@
 package world
 
 const (
-	MapWidth  = 16
-	MapHeight = 16
+	MapWidth  = 32
+	MapHeight = 32
 )
 
 type Tile struct {
@@ -12,6 +12,7 @@ type Tile struct {
 type World struct {
 	Tiles   [][]Tile
 	Rabbits []*Rabbit
+	Foxes   []*Fox
 }
 
 func NewWorld() *World {
@@ -25,6 +26,7 @@ func NewWorld() *World {
 	return &World{
 		Tiles:   tiles,
 		Rabbits: []*Rabbit{},
+		Foxes:   []*Fox{},
 	}
 }
 
@@ -53,29 +55,45 @@ func (w *World) Update() {
 			r.ReproductionCooldown--
 		}
 
-		if r.CanReproduce() {
-			for _, other := range w.Rabbits {
-				if other != r && other.CanReproduce() &&
-					Abs(r.X-other.X) <= 1 && Abs(r.Y-other.Y) <= 1 {
-					child := NewRabbit(r.X, r.Y)
-					newRabbits = append(newRabbits, child)
-					r.ReproductionCooldown = RabbitReproductionCD
-					other.ReproductionCooldown = RabbitReproductionCD
-					break
-				}
-			}
-		}
-
 		aliveRabbits = append(aliveRabbits, r)
 	}
 
 	w.Rabbits = append(aliveRabbits, newRabbits...)
+
+	var newFoxes []*Fox
+	var aliveFoxes []*Fox
+
+	for _, f := range w.Foxes {
+		if !f.IsAlive() {
+			continue
+		}
+
+		f.Move(w)
+
+		f.Energy -= FoxEnergyLossPerTick
+		if f.ReproductionCooldown > 0 {
+			f.ReproductionCooldown--
+		}
+
+		aliveFoxes = append(aliveFoxes, f)
+	}
+
+	w.Foxes = append(aliveFoxes, newFoxes...)
 }
 
 func (w *World) IsOccupiedByRabbit(x, y int) *Rabbit {
 	for _, rabbit := range w.Rabbits {
 		if rabbit.IsAlive() && rabbit.X == x && rabbit.Y == y {
 			return rabbit
+		}
+	}
+	return nil
+}
+
+func (w *World) IsOccupiedByFox(x, y int) *Fox {
+	for _, fox := range w.Foxes {
+		if fox.IsAlive() && fox.X == x && fox.Y == y {
+			return fox
 		}
 	}
 	return nil
