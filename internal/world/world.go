@@ -1,8 +1,8 @@
 package world
 
 const (
-	MapWidth  = 100
-	MapHeight = 100
+	MapWidth  = 16
+	MapHeight = 16
 )
 
 type Tile struct {
@@ -10,7 +10,8 @@ type Tile struct {
 }
 
 type World struct {
-	Tiles [][]Tile
+	Tiles   [][]Tile
+	Rabbits []*Rabbit
 }
 
 func NewWorld() *World {
@@ -21,7 +22,10 @@ func NewWorld() *World {
 			tiles[y][x] = Tile{Grass: nil}
 		}
 	}
-	return &World{Tiles: tiles}
+	return &World{
+		Tiles:   tiles,
+		Rabbits: []*Rabbit{},
+	}
 }
 
 func (w *World) Update() {
@@ -32,4 +36,38 @@ func (w *World) Update() {
 			}
 		}
 	}
+
+	var newRabbits []*Rabbit
+	var aliveRabbits []*Rabbit
+
+	for _, r := range w.Rabbits {
+		if !r.IsAlive() {
+			continue
+		}
+
+		r.Move(w)
+		r.Eat(w)
+
+		r.Energy -= RabbitEnergyLossPerTick
+		if r.ReproductionCooldown > 0 {
+			r.ReproductionCooldown--
+		}
+
+		if r.CanReproduce() {
+			for _, other := range w.Rabbits {
+				if other != r && other.CanReproduce() &&
+					Abs(r.X-other.X) <= 1 && Abs(r.Y-other.Y) <= 1 {
+					child := NewRabbit(r.X, r.Y)
+					newRabbits = append(newRabbits, child)
+					r.ReproductionCooldown = RabbitReproductionCD
+					other.ReproductionCooldown = RabbitReproductionCD
+					break
+				}
+			}
+		}
+
+		aliveRabbits = append(aliveRabbits, r)
+	}
+
+	w.Rabbits = append(aliveRabbits, newRabbits...)
 }

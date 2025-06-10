@@ -12,10 +12,14 @@ import (
 
 type Game struct {
 	world *world.World
+	tick  int
 }
 
 func (g *Game) Update() error {
-	g.world.Update()
+	if g.tick%5 == 0 {
+		g.world.Update()
+	}
+	g.tick++
 	return nil
 }
 
@@ -39,6 +43,12 @@ func main() {
 				w.Tiles[y][x].Grass = world.NewGrass()
 			}
 		}
+	}
+
+	for i := 0; i < 20; i++ {
+		x := rand.Intn(world.MapWidth)
+		y := rand.Intn(world.MapHeight)
+		w.Rabbits = append(w.Rabbits, world.NewRabbit(x, y))
 	}
 
 	ebiten.SetWindowTitle("Rabbits and Foxes – Ecosystem")

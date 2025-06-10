@@ -10,12 +10,13 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-//go:embed assets/tiles/*.jpg
+//go:embed assets/tiles/*.jpg assets/animals/*.png
 var tileFiles embed.FS
 
 var (
 	GrassTile *ebiten.Image
 	DirtTile  *ebiten.Image
+	Rabbit    *ebiten.Image
 )
 
 func LoadAssets() {
@@ -33,4 +34,5 @@ func LoadAssets() {
 
 	GrassTile = load("assets/tiles/grass.jpg")
 	DirtTile = load("assets/tiles/dirt.jpg")
+	Rabbit = load("assets/animals/rabbit.png")
 }
