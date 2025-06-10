@@ -14,6 +14,7 @@ type Rabbit struct {
 	X, Y                 int
 	Energy               float64
 	ReproductionCooldown int
+	Direction            int // -1 for left, 1 for right
 }
 
 func NewRabbit(x, y int) *Rabbit {
@@ -22,6 +23,7 @@ func NewRabbit(x, y int) *Rabbit {
 		Y:                    y,
 		Energy:               RabbitInitialEnergy,
 		ReproductionCooldown: 10,
+		Direction:            -1,
 	}
 }
 
@@ -38,6 +40,23 @@ func (r *Rabbit) Move(w *World) {
 	dy := rand.Intn(3) - 1
 	nx := Clamp(r.X+dx, 0, MapWidth-1)
 	ny := Clamp(r.Y+dy, 0, MapHeight-1)
+
+	if dx > 0 {
+		r.Direction = 1
+	} else if dx < 0 {
+		r.Direction = -1
+	}
+
+	if other := w.IsOccupiedByRabbit(nx, ny); other != nil && other != r {
+		if r.CanReproduce() && other.CanReproduce() {
+			child := NewRabbit(r.X, r.Y)
+			w.Rabbits = append(w.Rabbits, child)
+			r.ReproductionCooldown = RabbitReproductionCD
+			other.ReproductionCooldown = RabbitReproductionCD
+		}
+		return
+	}
+
 	r.X, r.Y = nx, ny
 }
 

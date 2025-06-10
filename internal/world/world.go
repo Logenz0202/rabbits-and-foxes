@@ -71,3 +71,12 @@ func (w *World) Update() {
 
 	w.Rabbits = append(aliveRabbits, newRabbits...)
 }
+
+func (w *World) IsOccupiedByRabbit(x, y int) *Rabbit {
+	for _, rabbit := range w.Rabbits {
+		if rabbit.IsAlive() && rabbit.X == x && rabbit.Y == y {
+			return rabbit
+		}
+	}
+	return nil
+}
