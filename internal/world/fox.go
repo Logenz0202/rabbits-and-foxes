@@ -6,7 +6,7 @@ const (
 	FoxInitialEnergy     = 15.0
 	FoxMaxEnergy         = 25.0
 	FoxEatGain           = 10.0
-	FoxReproductionCD    = 8
+	FoxReproductionCD    = 3
 	FoxEnergyLossPerTick = 0.3
 )
 
@@ -22,7 +22,7 @@ func NewFox(x, y int) *Fox {
 		X:                    x,
 		Y:                    y,
 		Energy:               FoxInitialEnergy,
-		ReproductionCooldown: 10,
+		ReproductionCooldown: FoxReproductionCD,
 		Direction:            -1,
 	}
 }
@@ -55,15 +55,7 @@ func (f *Fox) Move(w *World) {
 		rabbit.Energy = 0
 	}
 
-	if other := w.IsOccupiedByFox(nx, ny); other != nil && other != f {
-		if f.CanReproduce() && other.CanReproduce() {
-			child := NewFox(f.X, f.Y)
-			w.Foxes = append(w.Foxes, child)
-			f.ReproductionCooldown = FoxReproductionCD
-			other.ReproductionCooldown = FoxReproductionCD
-		}
-		return
+	if other := w.IsOccupiedByFox(nx, ny); other == nil {
+		f.X, f.Y = nx, ny
 	}
-
-	f.X, f.Y = nx, ny
 }

@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"image/color"
 	"math/rand"
 	"time"
@@ -11,6 +10,7 @@ import (
 	"rabbits-and-foxes/internal/world"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/text"
 	"golang.org/x/image/font/basicfont"
 )
@@ -34,7 +34,7 @@ func NewGame() *Game {
 }
 
 func (g *Game) Update() error {
-	if g.tick%5 == 0 {
+	if g.tick%world.TicksPerFrame == 0 {
 		g.world.Update()
 
 		g.populationHistory.rabbits = append(g.populationHistory.rabbits, len(g.world.Rabbits))
@@ -56,7 +56,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
 	screen.DrawImage(worldImage, op)
 
-	info := fmt.Sprintf("Populacja:\nKroliki: %d\nLisy: %d",
+	info := fmt.Sprintf("Populacja:\n\nKroliki: %d\nLisy: %d",
 		len(g.world.Rabbits),
 		len(g.world.Foxes))
 
@@ -110,28 +110,30 @@ func main() {
 	graphics.LoadAssets()
 	game := NewGame()
 
+	// starting settings for the simulation are located in 'world.go'
+
 	for y := 0; y < world.MapHeight; y++ {
 		for x := 0; x < world.MapWidth; x++ {
-			if rand.Float64() < 0.15 {
+			if rand.Float64() < world.InitialGrassDensity {
 				game.world.Tiles[y][x].Grass = world.NewGrass()
 			}
 		}
 	}
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < world.InitialRabbitCount; i++ {
 		x := rand.Intn(world.MapWidth)
 		y := rand.Intn(world.MapHeight)
 		game.world.Rabbits = append(game.world.Rabbits, world.NewRabbit(x, y))
 	}
 
-	for i := 0; i < 20; i++ {
+	for i := 0; i < world.InitialFoxCount; i++ {
 		x := rand.Intn(world.MapWidth)
 		y := rand.Intn(world.MapHeight)
 		game.world.Foxes = append(game.world.Foxes, world.NewFox(x, y))
 	}
 
 	ebiten.SetWindowTitle("Rabbits and Foxes – Ecosystem")
-	ebiten.SetWindowSize(956, 800)
+	ebiten.SetWindowSize(956, 800) // fit for a 32x32 map
 
 	if err := ebiten.RunGame(game); err != nil {
 		panic(err)

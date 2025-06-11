@@ -1,8 +1,12 @@
 package world
 
 const (
-	MapWidth  = 32
-	MapHeight = 32
+	MapWidth            = 32   // number of vertical tiles
+	MapHeight           = 32   // number of horizontal tiles
+	InitialGrassDensity = 0.15 // % of tiles with pre-planted grass
+	InitialRabbitCount  = 100  // initial number of rabbits
+	InitialFoxCount     = 20   // initial number of foxes
+	TicksPerFrame       = 5    // number of world updates per frame
 )
 
 type Tile struct {
@@ -50,6 +54,19 @@ func (w *World) Update() {
 		r.Move(w)
 		r.Eat(w)
 
+		if r.CanReproduce() {
+			for _, other := range w.Rabbits {
+				if other != r && other.IsAlive() && other.CanReproduce() &&
+					IsAdjacent(r.X, r.Y, other.X, other.Y) {
+					child := NewRabbit(r.X, r.Y)
+					newRabbits = append(newRabbits, child)
+					r.ReproductionCooldown = RabbitReproductionCD
+					other.ReproductionCooldown = RabbitReproductionCD
+					break
+				}
+			}
+		}
+
 		r.Energy -= RabbitEnergyLossPerTick
 		if r.ReproductionCooldown > 0 {
 			r.ReproductionCooldown--
@@ -69,6 +86,19 @@ func (w *World) Update() {
 		}
 
 		f.Move(w)
+
+		if f.CanReproduce() {
+			for _, other := range w.Foxes {
+				if other != f && other.IsAlive() && other.CanReproduce() &&
+					IsAdjacent(f.X, f.Y, other.X, other.Y) {
+					child := NewFox(f.X, f.Y)
+					newFoxes = append(newFoxes, child)
+					f.ReproductionCooldown = FoxReproductionCD
+					other.ReproductionCooldown = FoxReproductionCD
+					break
+				}
+			}
+		}
 
 		f.Energy -= FoxEnergyLossPerTick
 		if f.ReproductionCooldown > 0 {

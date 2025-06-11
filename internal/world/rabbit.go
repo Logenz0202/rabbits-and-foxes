@@ -47,17 +47,9 @@ func (r *Rabbit) Move(w *World) {
 		r.Direction = -1
 	}
 
-	if other := w.IsOccupiedByRabbit(nx, ny); other != nil && other != r {
-		if r.CanReproduce() && other.CanReproduce() {
-			child := NewRabbit(r.X, r.Y)
-			w.Rabbits = append(w.Rabbits, child)
-			r.ReproductionCooldown = RabbitReproductionCD
-			other.ReproductionCooldown = RabbitReproductionCD
-		}
-		return
+	if other := w.IsOccupiedByRabbit(nx, ny); other == nil {
+		r.X, r.Y = nx, ny
 	}
-
-	r.X, r.Y = nx, ny
 }
 
 func (r *Rabbit) Eat(w *World) {
