@@ -14,18 +14,23 @@ This is a graphical ecosystem simulation written in Go, using the [Ebiten](https
 
 - **Mouse or keyboard input** to spawn new rabbits and foxes on the map.
 - **UI panel** to adjust simulation parameters like grass growth speed, initial populations, etc.
-- **Buttons** to pause or reset the simulation.
+- **Buttons** for pausing or restarting the simulation.
 
 ## Project Structure
 
 ```
 project_root/
 ├── internal/
+│   │
 │   ├── graphics/           # Asset loading and rendering code
 │   │   ├── assets.go
 │   │   └── assets/
+│   │       ├── animals/
+│   │       └── tiles/
+│   │
 │   ├── world/              # Map, grass logic, entities
 │   └── game/               # Game loop, update logic
+│
 ├── main.go
 ├── go.mod
 └── README.md
