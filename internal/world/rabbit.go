@@ -8,11 +8,13 @@ const (
 	RabbitEatGain           = 5.0
 	RabbitReproductionCD    = 2
 	RabbitEnergyLossPerTick = 0.2
+	RabbitAgeEnergyFactor   = 0.001
 )
 
 type Rabbit struct {
 	X, Y                 int
 	Energy               float64
+	Age                  int
 	ReproductionCooldown int
 	Direction            int // -1 for left, 1 for right
 }
@@ -22,6 +24,7 @@ func NewRabbit(x, y int) *Rabbit {
 		X:                    x,
 		Y:                    y,
 		Energy:               RabbitInitialEnergy,
+		Age:                  0,
 		ReproductionCooldown: 5,
 		Direction:            -1,
 	}

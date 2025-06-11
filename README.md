@@ -9,12 +9,12 @@ This is a graphical ecosystem simulation written in Go, using the [Ebiten](https
 - **Foxes** hunt rabbits, reproduce after eating, and also die without food.
 - **Real-time graph** displaying population dynamics of all entities.
 - **Tile-based pixel art** visuals (32x32 JPG/PNG sprites).
+- **Keyboard input** for pausing and restarting the simulation.
 
 ## TODO
 
 - **Mouse or keyboard input** to spawn new rabbits and foxes on the map.
 - **UI panel** to adjust simulation parameters like grass growth speed, initial populations, etc.
-- **Buttons** for pausing or restarting the simulation.
 
 ## Project Structure
 

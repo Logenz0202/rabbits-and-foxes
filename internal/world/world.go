@@ -6,7 +6,7 @@ const (
 	InitialGrassDensity = 0.15 // % of tiles with pre-planted grass
 	InitialRabbitCount  = 100  // initial number of rabbits
 	InitialFoxCount     = 20   // initial number of foxes
-	TicksPerFrame       = 5    // number of world updates per frame
+	SimulationSpeed     = 7    // the higher the number, the slower the simulation
 )
 
 type Tile struct {
@@ -67,7 +67,10 @@ func (w *World) Update() {
 			}
 		}
 
-		r.Energy -= RabbitEnergyLossPerTick
+		r.Age++
+		energyLoss := RabbitEnergyLossPerTick + float64(r.Age)*RabbitAgeEnergyFactor
+		r.Energy -= energyLoss
+
 		if r.ReproductionCooldown > 0 {
 			r.ReproductionCooldown--
 		}
@@ -100,7 +103,10 @@ func (w *World) Update() {
 			}
 		}
 
-		f.Energy -= FoxEnergyLossPerTick
+		f.Age += 1
+		energyLoss := FoxEnergyLossPerTick + float64(f.Age)*FoxAgeEnergyFactor
+		f.Energy -= energyLoss
+
 		if f.ReproductionCooldown > 0 {
 			f.ReproductionCooldown--
 		}

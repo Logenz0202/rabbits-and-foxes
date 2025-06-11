@@ -3,11 +3,13 @@ package game
 import (
 	"fmt"
 	"image/color"
+	"math/rand"
 	"rabbits-and-foxes/internal/graphics"
 	"rabbits-and-foxes/internal/world"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/hajimehoshi/ebiten/v2/text"
 	"golang.org/x/image/font/basicfont"
 )
@@ -15,6 +17,8 @@ import (
 type Game struct {
 	World             *world.World
 	Tick              int
+	SimulationTick    int
+	IsPaused          bool
 	PopulationHistory struct {
 		Rabbits []int
 		Foxes   []int
@@ -27,12 +31,40 @@ func NewGame() *Game {
 	g := &Game{
 		World: world.NewWorld(),
 	}
+	g.IsPaused = false
 	g.PopulationHistory.MaxLen = 100
+	g.CreateLife()
 	return g
 }
 
+func (g *Game) TogglePause() {
+	g.IsPaused = !g.IsPaused
+}
+
+func (g *Game) ToggleRestart() {
+	g.World = world.NewWorld()
+	g.Tick = 0
+	g.SimulationTick = 0
+	g.PopulationHistory.Rabbits = []int{}
+	g.PopulationHistory.Foxes = []int{}
+	g.PopulationHistory.Peak = 0
+	g.CreateLife()
+	g.IsPaused = false
+}
+
 func (g *Game) Update() error {
-	if g.Tick%world.TicksPerFrame == 0 {
+	if inpututil.IsKeyJustPressed(ebiten.KeySpace) {
+		g.TogglePause()
+	}
+
+	if inpututil.IsKeyJustPressed(ebiten.KeyR) {
+		g.ToggleRestart()
+	}
+
+	g.Tick++
+
+	if !g.IsPaused && g.Tick%world.SimulationSpeed == 0 {
+		g.SimulationTick++
 		g.World.Update()
 
 		g.PopulationHistory.Rabbits = append(g.PopulationHistory.Rabbits, len(g.World.Rabbits))
@@ -42,10 +74,10 @@ func (g *Game) Update() error {
 			g.PopulationHistory.Rabbits = g.PopulationHistory.Rabbits[1:]
 			g.PopulationHistory.Foxes = g.PopulationHistory.Foxes[1:]
 		}
-
-		g.updatePopulationPeak()
 	}
-	g.Tick++
+
+	g.updatePopulationPeak()
+
 	return nil
 }
 
@@ -56,15 +88,24 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
 	screen.DrawImage(worldImage, op)
 
-	info := fmt.Sprintf("Population:\n\nRabbits: %d\nFoxes: %d",
+	info := fmt.Sprintf("Population:\n\nRabbits: %d\nFoxes: %d\n",
 		len(g.World.Rabbits),
 		len(g.World.Foxes))
+
+	buttonsText := "\n\nSPACE: pause/play\nR: restart"
 
 	text.Draw(screen,
 		info,
 		basicfont.Face7x13,
 		world.MapWidth*graphics.TileSize+10,
 		20,
+		color.White)
+
+	text.Draw(screen,
+		buttonsText,
+		basicfont.Face7x13,
+		world.MapWidth*graphics.TileSize+10,
+		50,
 		color.White)
 
 	g.drawPopulationGraph(screen)
@@ -125,4 +166,26 @@ func (g *Game) drawPopulationGraph(screen *ebiten.Image) {
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 	return world.MapWidth*graphics.TileSize + 200, world.MapHeight * graphics.TileSize
+}
+
+func (g *Game) CreateLife() {
+	for y := 0; y < world.MapHeight; y++ {
+		for x := 0; x < world.MapWidth; x++ {
+			if rand.Float64() < world.InitialGrassDensity {
+				g.World.Tiles[y][x].Grass = world.NewGrass()
+			}
+		}
+	}
+
+	for i := 0; i < world.InitialRabbitCount; i++ {
+		x := rand.Intn(world.MapWidth)
+		y := rand.Intn(world.MapHeight)
+		g.World.Rabbits = append(g.World.Rabbits, world.NewRabbit(x, y))
+	}
+
+	for i := 0; i < world.InitialFoxCount; i++ {
+		x := rand.Intn(world.MapWidth)
+		y := rand.Intn(world.MapHeight)
+		g.World.Foxes = append(g.World.Foxes, world.NewFox(x, y))
+	}
 }

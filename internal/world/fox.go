@@ -8,11 +8,13 @@ const (
 	FoxEatGain           = 10.0
 	FoxReproductionCD    = 7
 	FoxEnergyLossPerTick = 0.3
+	FoxAgeEnergyFactor   = 0.001
 )
 
 type Fox struct {
 	X, Y                 int
 	Energy               float64
+	Age                  int
 	ReproductionCooldown int
 	Direction            int // -1 for left, 1 for right
 }
@@ -22,6 +24,7 @@ func NewFox(x, y int) *Fox {
 		X:                    x,
 		Y:                    y,
 		Energy:               FoxInitialEnergy,
+		Age:                  0,
 		ReproductionCooldown: FoxReproductionCD,
 		Direction:            -1,
 	}
