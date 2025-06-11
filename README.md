@@ -21,24 +21,11 @@ This is a graphical ecosystem simulation written in Go, using the [Ebiten](https
 ```
 project_root/
 ├── internal/
-│   ├── game/               # Game loop, update logic
-│   │   └── game.go
 │   ├── graphics/           # Asset loading and rendering code
-│   │   ├── assets/
-│   │   │   ├── animals/
-│   │   │   │   ├── fox.png
-│   │   │   │   └── rabbit.png
-│   │   │   └── tiles/
-│   │   │       ├── dirt.jpg
-│   │   │       └── grass.jpg
 │   │   ├── assets.go
-│   │   └── renderer.go
-│   └── world/              # Map, grass logic, entities
-│       ├── fox.go
-│       ├── grass.go
-│       ├── rabbit.go
-│       ├── utils.go
-│       └── world.go
+│   │   └── assets/
+│   ├── world/              # Map, grass logic, entities
+│   └── game/               # Game loop, update logic
 ├── main.go
 ├── go.mod
 └── README.md
