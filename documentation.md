@@ -47,7 +47,7 @@ Brief description, project structure, and system requirements are presented [her
 ### 3.2. Interesting Phenomena
 - Formation of "hot spots" - areas of increased activity
 - Periodic population extinction under extreme parameters
-- System self-regulation with appropriate parameter values (haven't managed to find these parameters yet)
+- System self-regulation with appropriate parameter values
 
 ### 3.3. Critical Points
 - Too small initial rabbit population can lead to fox extinction
@@ -61,3 +61,6 @@ Brief description, project structure, and system requirements are presented [her
 
 ### 4.2. Potential Extensions
 - Implementation of more advanced animal behaviors (e.g., prey tracking by predator)
+
+### 4.3 Summary
+The simulation provides an interesting example of a simple ecosystem model that allows for observation of species interactions and population dynamics. Despite its simplicity, it offers many opportunities for further development and research into more complex systems. The task was challenging but satisfying. Even though I wasn't able to find parameters that would ensure balance and survival of both species, several repetitions of the cycle described in **3.1** could be observed.

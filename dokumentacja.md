@@ -47,7 +47,7 @@ Krótki opis, struktura projektu, oraz wymagania systemowe są przedstawione [tu
 ### 3.2. Ciekawe zjawiska
 - Tworzenie się "hot spotów" - obszarów o zwiększonej aktywności
 - Okresowe wymieranie populacji przy skrajnych parametrach
-- Samoregulacja systemu przy odpowiednich wartościach parametrów (nie udało mi się jeszcze znaleźć tych parametrów)
+- Samoregulacja systemu przy odpowiednich wartościach parametrów
 
 ### 3.3. Punkty krytyczne
 - Zbyt mała początkowa populacja królików może prowadzić do wymarcia lisów
@@ -61,3 +61,6 @@ Krótki opis, struktura projektu, oraz wymagania systemowe są przedstawione [tu
 
 ### 4.2. Potencjalne rozszerzenia
 - Implementacja bardziej zaawansowanych zachowań zwierząt (np. śledzenie ofiar przez drapieżnika)
+
+### 4.3 Podsumowanie
+Symulacja stanowi ciekawy przykład prostego modelu ekosystemu, który pozwala na obserwację interakcji między gatunkami i dynamiki populacji. Mimo swojej prostoty, oferuje wiele możliwości do dalszego rozwoju i badań nad bardziej rozbudowanymi systemami. Zadanie było wymagające, ale satysfakcjonujące. Nawet jeśli nie udało mi się znaleźć parametrów, które zapewniłyby balans i przetrwanie obu gatunków, zdarzały się kilkukrotne powtórzenia cyklu opisanego w **3.1**.
