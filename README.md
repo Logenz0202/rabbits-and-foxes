@@ -2,6 +2,8 @@
 
 This is a graphical ecosystem simulation written in Go, using the [Ebiten](https://ebiten.org/) game library. The simulation models the interaction between grass, rabbits, and foxes on a grid-based map with pixel-art-style graphics.
 
+## Documentation ([PL](dokumentacja.md)) / ([EN](documentation.md))
+
 ## Features
 
 - **Grass** grows on tiles over time and spreads to neighboring empty spaces.
