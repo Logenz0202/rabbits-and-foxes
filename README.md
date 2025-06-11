@@ -49,8 +49,8 @@ All changes are currently made via `world/world.go`.
 
 ```go
 const (
-	MapWidth            = 32   // number of vertical tiles
-	MapHeight           = 32   // number of horizontal tiles
+	MapWidth            = 32   // number of horizontal tiles (columns)
+	MapHeight           = 32   // number of vertical tiles (rows)
 	InitialGrassDensity = 0.15 // % of tiles with pre-planted grass
 	InitialRabbitCount  = 100  // initial number of rabbits
 	InitialFoxCount     = 20   // initial number of foxes
