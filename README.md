@@ -43,6 +43,21 @@ project_root/
 - Go 1.18+
 - Ebiten (via `go get github.com/hajimehoshi/ebiten/v2`)
 
+## Changing simulation settings
+
+All changes are currently made via `world/world.go`.
+
+```go
+const (
+	MapWidth            = 32   // number of vertical tiles
+	MapHeight           = 32   // number of horizontal tiles
+	InitialGrassDensity = 0.15 // % of tiles with pre-planted grass
+	InitialRabbitCount  = 100  // initial number of rabbits
+	InitialFoxCount     = 20   // initial number of foxes
+	SimulationSpeed     = 7    // the higher the number, the slower the simulation
+)
+```
+
 ## Running the Simulation
 
 ```bash
