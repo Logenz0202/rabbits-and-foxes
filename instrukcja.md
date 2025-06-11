@@ -19,6 +19,6 @@ Uproszczony mockup projektu pokazuję na rysunku - widać w nim tło z królikam
 
 ### Do oddania:
 
-Program w wersji źródłowej.
-Program w wersji zoptymalizowanej, skompilowanej pod Linux
-Dokumentacja: opracowanie na temat działania algorytmów, które wykorzystałeś, ciekawe miejsca, Twoja ocena i opinia o symulacji, co odkryłeś lub odkryłaś, itp.
+Program w wersji źródłowej.  
+Program w wersji zoptymalizowanej, skompilowanej pod Linux.  
+**Dokumentacja**: opracowanie na temat działania algorytmów, które wykorzystałeś, ciekawe miejsca, Twoja ocena i opinia o symulacji, co odkryłeś lub odkryłaś, itp.

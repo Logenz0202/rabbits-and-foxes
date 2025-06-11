@@ -22,6 +22,7 @@ type Game struct {
 		rabbits []int
 		foxes   []int
 		maxLen  int
+		peak    int
 	}
 }
 
@@ -44,6 +45,8 @@ func (g *Game) Update() error {
 			g.populationHistory.rabbits = g.populationHistory.rabbits[1:]
 			g.populationHistory.foxes = g.populationHistory.foxes[1:]
 		}
+
+		g.updatePopulationPeak()
 	}
 	g.tick++
 	return nil
@@ -56,7 +59,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
 	screen.DrawImage(worldImage, op)
 
-	info := fmt.Sprintf("Populacja:\n\nKroliki: %d\nLisy: %d",
+	info := fmt.Sprintf("Population:\n\nRabbits: %d\nFoxes: %d",
 		len(g.world.Rabbits),
 		len(g.world.Foxes))
 
@@ -70,11 +73,29 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	g.drawPopulationGraph(screen)
 }
 
+func (g *Game) updatePopulationPeak() {
+	currentPeak := 0
+	for i := range g.populationHistory.rabbits {
+		if g.populationHistory.rabbits[i] > currentPeak {
+			currentPeak = g.populationHistory.rabbits[i]
+		}
+		if g.populationHistory.foxes[i] > currentPeak {
+			currentPeak = g.populationHistory.foxes[i]
+		}
+	}
+	g.populationHistory.peak = currentPeak
+}
+
 func (g *Game) drawPopulationGraph(screen *ebiten.Image) {
 	graphX := world.MapWidth*graphics.TileSize + 10
 	graphY := 100
+	minGraphHeight := 100
 	graphWidth := 180
-	graphHeight := 100
+
+	graphHeight := minGraphHeight
+	if g.populationHistory.peak > minGraphHeight {
+		graphHeight = g.populationHistory.peak + 10
+	}
 
 	graphImg := ebiten.NewImage(graphWidth, graphHeight)
 	graphImg.Fill(color.RGBA{20, 20, 20, 255})
@@ -83,14 +104,19 @@ func (g *Game) drawPopulationGraph(screen *ebiten.Image) {
 		for i := 1; i < len(g.populationHistory.rabbits); i++ {
 			x1 := float64(graphWidth) * float64(i-1) / float64(g.populationHistory.maxLen)
 			x2 := float64(graphWidth) * float64(i) / float64(g.populationHistory.maxLen)
-			y1 := float64(graphHeight) * (1 - float64(g.populationHistory.rabbits[i-1])/200)
-			y2 := float64(graphHeight) * (1 - float64(g.populationHistory.rabbits[i])/200)
 
+			maxValue := float64(g.populationHistory.peak)
+			if maxValue < float64(minGraphHeight) {
+				maxValue = float64(minGraphHeight)
+			}
+			scaleY := float64(graphHeight) / maxValue
+
+			y1 := float64(graphHeight) - (float64(g.populationHistory.rabbits[i-1]) * scaleY)
+			y2 := float64(graphHeight) - (float64(g.populationHistory.rabbits[i]) * scaleY)
 			ebitenutil.DrawLine(graphImg, x1, y1, x2, y2, color.White)
 
-			y1 = float64(graphHeight) * (1 - float64(g.populationHistory.foxes[i-1])/200)
-			y2 = float64(graphHeight) * (1 - float64(g.populationHistory.foxes[i])/200)
-
+			y1 = float64(graphHeight) - (float64(g.populationHistory.foxes[i-1]) * scaleY)
+			y2 = float64(graphHeight) - (float64(g.populationHistory.foxes[i]) * scaleY)
 			ebitenutil.DrawLine(graphImg, x1, y1, x2, y2, color.RGBA{255, 0, 0, 255})
 		}
 	}

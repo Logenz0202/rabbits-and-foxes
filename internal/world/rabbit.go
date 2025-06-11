@@ -6,7 +6,7 @@ const (
 	RabbitInitialEnergy     = 10.0
 	RabbitMaxEnergy         = 20.0
 	RabbitEatGain           = 5.0
-	RabbitReproductionCD    = 5
+	RabbitReproductionCD    = 2
 	RabbitEnergyLossPerTick = 0.2
 )
 
@@ -22,7 +22,7 @@ func NewRabbit(x, y int) *Rabbit {
 		X:                    x,
 		Y:                    y,
 		Energy:               RabbitInitialEnergy,
-		ReproductionCooldown: 10,
+		ReproductionCooldown: 5,
 		Direction:            -1,
 	}
 }

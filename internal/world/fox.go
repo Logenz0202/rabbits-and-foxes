@@ -6,7 +6,7 @@ const (
 	FoxInitialEnergy     = 15.0
 	FoxMaxEnergy         = 25.0
 	FoxEatGain           = 10.0
-	FoxReproductionCD    = 3
+	FoxReproductionCD    = 7
 	FoxEnergyLossPerTick = 0.3
 )
 
